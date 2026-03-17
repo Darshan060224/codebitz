@@ -73,6 +73,7 @@ async function ensureDb() {
 const expressHandler = serverless(app);
 
 exports.handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   await ensureDb();
   return expressHandler(event, context);
 };
