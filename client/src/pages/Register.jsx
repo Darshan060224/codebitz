@@ -21,7 +21,9 @@ export default function Register() {
       toast.success(`Welcome, ${user.name}! You received ₹5,000 credits!`);
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Registration failed');
+      const message = err.response?.data?.error
+        || (err.code === 'ERR_NETWORK' ? 'Cannot reach server. Check VITE_API_URL and backend CORS settings.' : 'Registration failed');
+      toast.error(message);
     } finally {
       setLoading(false);
     }
