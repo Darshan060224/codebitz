@@ -4,6 +4,10 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const connectDB = require('../../server/src/config/db');
 
+if (!process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = process.env.NETLIFY_DATABASE_URL_UNPOOLED || process.env.NETLIFY_DATABASE_URL || '';
+}
+
 const authRoutes = require('../../server/src/routes/auth');
 const auctionRoutes = require('../../server/src/routes/auctions');
 const adminRoutes = require('../../server/src/routes/admin');
@@ -59,6 +63,7 @@ app.get('/health', (req, res) => {
 
 let dbReady;
 async function ensureDb() {
+  if (process.env.DATABASE_URL) return;
   if (!dbReady) {
     dbReady = connectDB();
   }
