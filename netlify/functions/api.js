@@ -32,13 +32,28 @@ app.use(limiter);
 app.use(cors());
 app.use(express.json());
 
+// Support both routing styles because Netlify rewrites can forward either
+// /api/* or stripped /* depending on platform behavior.
 app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
+
 app.use('/api/auctions', auctionRoutes);
+app.use('/auctions', auctionRoutes);
+
 app.use('/api/admin', adminRoutes);
+app.use('/admin', adminRoutes);
+
 app.use('/api/bids', bidRoutes);
+app.use('/bids', bidRoutes);
+
 app.use('/api/wallet', walletRoutes);
+app.use('/wallet', walletRoutes);
 
 app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', time: new Date().toISOString(), runtime: 'netlify-function' });
+});
+
+app.get('/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString(), runtime: 'netlify-function' });
 });
 
